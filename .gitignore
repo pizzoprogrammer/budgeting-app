@@ -1,0 +1,13 @@
+# ignore node modules
+node_modules/
+
+# ignore env files
+.env
+.env.*
+
+# ignore temp files
+tmpclaude*
+
+# ignore build folders
+dist/
+build/
