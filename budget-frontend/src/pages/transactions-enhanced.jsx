@@ -247,7 +247,7 @@ export function Transactions() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
@@ -255,8 +255,8 @@ export function Transactions() {
       {/* Filters */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Filter size={20} className="text-gray-600" />
-          <h3 className="font-semibold text-gray-900">Filters</h3>
+          <Filter size={20} className="text-gray-600 dark:text-gray-300" />
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Filters</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
@@ -331,20 +331,20 @@ export function Transactions() {
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b bg-gray-50">
+              <thead className="border-b bg-gray-50 dark:bg-gray-800">
                 <tr className="text-left">
-                  <th className="px-6 py-3 font-semibold text-gray-700">Date</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Category</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Type</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Amount</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Note</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Action</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Date</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Category</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Type</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Amount</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Note</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {filteredTransactions.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                       {transactions.length === 0
                         ? 'No transactions yet. Add your first transaction to get started!'
                         : 'No transactions match your filters.'}
@@ -361,8 +361,8 @@ export function Transactions() {
                         <Badge
                           className={
                             transaction.type === 'income'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                           }
                         >
                           {transaction.type}
@@ -370,18 +370,18 @@ export function Transactions() {
                       </td>
                       <td className="px-6 py-3 font-semibold">
                         <span
-                          className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}
+                          className={transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}
                         >
                           {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                         </span>
                       </td>
-                      <td className="px-6 py-3 text-gray-600">
+                      <td className="px-6 py-3 text-gray-600 dark:text-gray-400">
                         {transaction.note || '-'}
                       </td>
                       <td className="px-6 py-3">
                         <button
                           onClick={() => handleDeleteTransaction(transaction._id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded transition-colors"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -392,7 +392,7 @@ export function Transactions() {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-3 border-t bg-gray-50 text-sm text-gray-600">
+          <div className="px-6 py-3 border-t bg-gray-50 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400">
             Showing {filteredTransactions.length} of {transactions.length} transactions
           </div>
         </Card>

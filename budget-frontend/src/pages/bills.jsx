@@ -97,7 +97,7 @@ export function Bills() {
     }
   };
 
-  if (loading) return <div className="text-center py-8">Loading bills...</div>;
+  if (loading) return <div className="text-center py-8"><p className="text-gray-500 dark:text-gray-400">Loading bills...</p></div>;
 
   const upcomingBills = bills.filter(b => b.isUpcoming);
   const pastBills = bills.filter(b => !b.isUpcoming);
@@ -106,7 +106,7 @@ export function Bills() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold text-gray-900">Bills & Subscriptions</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Bills & Subscriptions</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -176,19 +176,19 @@ export function Bills() {
         </Dialog>
       </div>
 
-      {error && <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{error}</div>}
+      {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">{error}</div>}
 
       {/* Summary Card */}
-      <Card className="p-6 bg-gradient-to-br from-orange-50 to-amber-50">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">Monthly Recurring Bills</h2>
+      <Card className="p-6 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-slate-900 dark:to-slate-800">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Monthly Recurring Bills</h2>
         <p className="text-3xl font-bold text-orange-600">{formatCurrency(totalMonthly, user?.currency)}</p>
-        <p className="text-sm text-gray-600 mt-2">{bills.length} total bills</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{bills.length} total bills</p>
       </Card>
 
       {/* Upcoming Bills */}
       {upcomingBills.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Clock className="text-blue-600" /> Upcoming Bills ({upcomingBills.length})
           </h2>
           <div className="grid gap-4">
@@ -196,9 +196,56 @@ export function Bills() {
               <Card key={bill._id} className="p-4 hover:shadow-lg transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg text-gray-900">{bill.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      Due in {bill.daysUntilDue} days • {new Date(bill.nextDueDate).toLocaleDateString()}
+                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{bill.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Due in {bill.daysUntilDue} days • {bill.nextDueDate ? new Date(bill.nextDueDate).toLocaleDateString() : 'No due date'}
+                    </p>
+                    <div className="flex gap-2 mt-2">
+                      <Badge variant="outline">{bill.category}</Badge>
+                      <Badge variant="outline">{bill.frequency}</Badge>
+                    </div>
+                  </div>
+                  <div className="text-right mr-4">
+                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(bill.amount, user?.currency)}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleMarkPaid(bill._id)}
+                      variant="ghost"
+                      size="icon"
+                      className="text-green-600 hover:bg-green-50"
+                    >
+                      <Check size={18} />
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteBill(bill._id)}
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 size={18} />
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {pastBills.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <AlertCircle className="text-purple-600" /> Past Bills ({pastBills.length})
+          </h2>
+          <div className="grid gap-4">
+            {pastBills.map(bill => (
+              <Card key={bill._id} className="p-4 hover:shadow-lg transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{bill.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {bill.nextDueDate ? new Date(bill.nextDueDate).toLocaleDateString() : 'No due date'}
                     </p>
                     <div className="flex gap-2 mt-2">
                       <Badge variant="outline">{bill.category}</Badge>
@@ -234,9 +281,9 @@ export function Bills() {
       )}
 
       {bills.length === 0 && (
-        <Card className="p-12 text-center">
-          <AlertCircle className="mx-auto mb-4 text-gray-400" size={48} />
-          <p className="text-gray-600">No bills yet. Add your first bill to get started!</p>
+        <Card className="p-12 text-center bg-white dark:bg-slate-900">
+          <AlertCircle className="mx-auto mb-4 text-gray-400 dark:text-gray-500" size={48} />
+          <p className="text-gray-600 dark:text-gray-400">No bills yet. Add your first bill to get started!</p>
         </Card>
       )}
     </div>

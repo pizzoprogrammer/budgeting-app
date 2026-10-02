@@ -66,7 +66,7 @@ export function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-gray-500">Loading dashboard...</p>
+        <p className="text-gray-500 dark:text-gray-400">Loading dashboard...</p>
       </div>
     );
   }
@@ -92,30 +92,30 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Total Income</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Total Income</p>
               <p className="text-3xl font-bold text-green-600">${totalIncome.toFixed(2)}</p>
             </div>
             <TrendingUp className="text-green-600 opacity-20" size={32} />
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Total Expenses</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Total Expenses</p>
               <p className="text-3xl font-bold text-red-600">${totalExpense.toFixed(2)}</p>
             </div>
             <TrendingDown className="text-red-600 opacity-20" size={32} />
@@ -125,7 +125,7 @@ export function Dashboard() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Remaining</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Remaining</p>
               <p className={`text-3xl font-bold ${savings >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 ${savings.toFixed(2)}
               </p>
@@ -137,7 +137,7 @@ export function Dashboard() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Savings Rate</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Savings Rate</p>
               <p className="text-3xl font-bold text-indigo-600">{savingsPercent}%</p>
             </div>
             <PiggyBank className="text-indigo-600 opacity-20" size={32} />
@@ -147,14 +147,14 @@ export function Dashboard() {
 
       {/* Budget Alerts */}
       {overBudgetCategories.length > 0 && (
-        <Card className="p-6 border-orange-200 bg-orange-50">
+        <Card className="p-6 border-orange-200 bg-orange-50 dark:border-orange-700 dark:bg-orange-900/20">
           <div className="flex items-start gap-3">
-            <AlertCircle className="text-orange-600 flex-shrink-0 mt-1" size={24} />
+            <AlertCircle className="text-orange-600 dark:text-orange-300 flex-shrink-0 mt-1" size={24} />
             <div>
-              <h3 className="font-semibold text-orange-900 mb-2">Budget Alerts</h3>
+              <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-2">Budget Alerts</h3>
               <div className="space-y-2">
                 {overBudgetCategories.map((item, idx) => (
-                  <p key={idx} className="text-sm text-orange-800">
+                  <p key={idx} className="text-sm text-orange-800 dark:text-orange-200">
                     <span className="capitalize font-medium">{item.category}</span> is over budget by{' '}
                     <span className="font-bold">${(item.spent - item.budget).toFixed(2)}</span>
                   </p>
@@ -228,11 +228,11 @@ export function Dashboard() {
             <table className="w-full text-sm">
               <thead className="border-b">
                 <tr className="text-left">
-                  <th className="pb-3 font-semibold text-gray-700">Category</th>
-                  <th className="pb-3 font-semibold text-gray-700">Budget</th>
-                  <th className="pb-3 font-semibold text-gray-700">Spent</th>
-                  <th className="pb-3 font-semibold text-gray-700">Remaining</th>
-                  <th className="pb-3 font-semibold text-gray-700">Status</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Category</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Budget</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Spent</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Remaining</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -241,7 +241,7 @@ export function Dashboard() {
                   const isOverBudget = item.spent > item.budget;
 
                   return (
-                    <tr key={idx} className="hover:bg-gray-50">
+                    <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="py-3 capitalize">{item.category}</td>
                       <td className="py-3">${item.budget.toFixed(2)}</td>
                       <td className="py-3">${item.spent.toFixed(2)}</td>

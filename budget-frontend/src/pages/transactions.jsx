@@ -116,7 +116,7 @@ export function Transactions() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold text-gray-900">Transactions</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Transactions</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -198,49 +198,49 @@ export function Transactions() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="flex items-center justify-center h-96">
-          <p className="text-gray-500">Loading transactions...</p>
+          <p className="text-gray-500 dark:text-gray-400">Loading transactions...</p>
         </div>
       ) : (
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b bg-gray-50">
+              <thead className="border-b bg-gray-50 dark:bg-gray-800">
                 <tr className="text-left">
-                  <th className="px-6 py-3 font-semibold text-gray-700">Date</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Category</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Type</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Amount</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Note</th>
-                  <th className="px-6 py-3 font-semibold text-gray-700">Action</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Date</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Category</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Type</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Amount</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Note</th>
+                  <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-200">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y dark:divide-gray-700">
                 {transactions.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan="6" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                       No transactions yet. Add your first transaction to get started!
                     </td>
                   </tr>
                 ) : (
                   transactions.map((transaction) => (
-                    <tr key={transaction._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-3">
+                    <tr key={transaction._id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                      <td className="px-6 py-3 dark:text-gray-300">
                         {new Date(transaction.date).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-3 capitalize">{transaction.category}</td>
+                      <td className="px-6 py-3 capitalize dark:text-gray-300">{transaction.category}</td>
                       <td className="px-6 py-3">
                         <Badge
                           className={
                             transaction.type === 'income'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                           }
                         >
                           {transaction.type}
@@ -248,18 +248,18 @@ export function Transactions() {
                       </td>
                       <td className="px-6 py-3 font-semibold">
                         <span
-                          className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}
+                          className={transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}
                         >
                           {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                         </span>
                       </td>
-                      <td className="px-6 py-3 text-gray-600">
+                      <td className="px-6 py-3 text-gray-600 dark:text-gray-400">
                         {transaction.note || '-'}
                       </td>
                       <td className="px-6 py-3">
                         <button
                           onClick={() => handleDeleteTransaction(transaction._id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded transition-colors"
                         >
                           <Trash2 size={18} />
                         </button>

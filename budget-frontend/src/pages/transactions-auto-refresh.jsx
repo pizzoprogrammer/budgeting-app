@@ -290,25 +290,25 @@ export function Transactions() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-pulse">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300 animate-pulse">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 animate-pulse">
+        <div className="p-4 bg-green-50 dark:bg-emerald-900/20 border border-green-200 dark:border-emerald-900 rounded-lg text-green-700 dark:text-emerald-200 animate-pulse">
           ✓ {success}
         </div>
       )}
 
       {/* Auto-Refresh Controls */}
-      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-blue-700">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <Clock size={18} className="text-blue-600" />
+            <Clock size={18} className="text-blue-600 dark:text-blue-300" />
             <div>
-              <p className="text-sm font-medium text-gray-900">Last Updated</p>
-              <p className="text-xs text-gray-600">{formatTime(lastUpdated)}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Last Updated</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">{formatTime(lastUpdated)}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -319,7 +319,7 @@ export function Transactions() {
                 onChange={(e) => setAutoRefresh(e.target.checked)}
                 className="w-4 h-4 rounded"
               />
-              <span className="text-sm text-gray-700">Auto-refresh (30s)</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Auto-refresh (30s)</span>
             </label>
             <Button
               onClick={fetchTransactions}
@@ -337,8 +337,8 @@ export function Transactions() {
       {/* Filters */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Filter size={20} className="text-gray-600" />
-          <h3 className="font-semibold text-gray-900">Filters</h3>
+          <Filter size={20} className="text-gray-600 dark:text-gray-300" />
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Filters</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
@@ -471,7 +471,7 @@ export function Transactions() {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-3 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 font-medium">
+          <div className="px-6 py-3 border-t bg-gray-50 dark:border-gray-700 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 font-medium">
             Showing {filteredTransactions.length} of {transactions.length} transactions
           </div>
         </Card>

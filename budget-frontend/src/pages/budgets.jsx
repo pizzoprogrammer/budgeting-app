@@ -59,6 +59,15 @@ export function Budgets() {
     }
   };
 
+  const selectedDateLabel = new Date(year, month - 1).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
+
+  const notifyBudgetUpdated = () => {
+    window.dispatchEvent(new CustomEvent('budgetUpdated'));
+  };
+
   useEffect(() => {
     fetchBudgets();
   }, [token, month, year]);
@@ -80,6 +89,7 @@ export function Budgets() {
         setError(result.error);
       } else {
         await fetchBudgets();
+        notifyBudgetUpdated();
         setDialogOpen(false);
         setFormData({ category: '', amount: '' });
       }
@@ -96,6 +106,7 @@ export function Budgets() {
         setError(result.error);
       } else {
         await fetchBudgets();
+        notifyBudgetUpdated();
       }
     } catch (err) {
       setError('Failed to delete budget');
@@ -105,7 +116,10 @@ export function Budgets() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h1 className="text-4xl font-bold text-gray-900">Budgets</h1>
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Budgets</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Viewing budgets for {selectedDateLabel}</p>
+        </div>
 
         <div className="flex items-center gap-4">
           <div className="flex gap-2">
@@ -191,20 +205,20 @@ export function Budgets() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="flex items-center justify-center h-96">
-          <p className="text-gray-500">Loading budgets...</p>
+          <p className="text-gray-500 dark:text-gray-400">Loading budgets...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {budgets.length === 0 ? (
             <Card className="p-8 col-span-full">
-              <p className="text-center text-gray-500">
+              <p className="text-center text-gray-500 dark:text-gray-400">
                 No budgets set for {new Date(year, month - 1).toLocaleDateString('en-US', {
                   month: 'long',
                   year: 'numeric',
@@ -216,16 +230,26 @@ export function Budgets() {
               <Card key={budget._id} className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold capitalize text-gray-900">
-                      {budget.category}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold capitalize text-gray-900 dark:text-white">
+                        {budget.category}
+                      </h3>
+                      <Badge variant="outline" className="rounded-full text-xs uppercase">
+                        {budget.month && budget.year
+                          ? new Date(budget.year, budget.month - 1).toLocaleDateString('en-US', {
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                          : selectedDateLabel}
+                      </Badge>
+                    </div>
                     <p className="text-2xl font-bold text-indigo-600 mt-2">
                       ${budget.amount.toFixed(2)}
                     </p>
                   </div>
                   <button
                     onClick={() => handleDeleteBudget(budget._id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                   >
                     <Trash2 size={20} />
                   </button>
@@ -234,12 +258,12 @@ export function Budgets() {
                 {budget.spent !== undefined && (
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm text-gray-600">Spent</span>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Spent</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
                         ${budget.spent.toFixed(2)}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
                       <div
                         className={`h-2 rounded-full transition-all ${
                           budget.spent > budget.amount ? 'bg-red-500' : 'bg-green-500'
@@ -250,11 +274,11 @@ export function Budgets() {
                       />
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
                         {((budget.spent / budget.amount) * 100).toFixed(0)}% used
                       </span>
                       {budget.spent > budget.amount && (
-                        <Badge className="bg-red-100 text-red-800">
+                        <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100">
                           Overspent by ${(budget.spent - budget.amount).toFixed(2)}
                         </Badge>
                       )}

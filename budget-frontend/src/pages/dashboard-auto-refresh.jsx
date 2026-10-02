@@ -91,6 +91,12 @@ export function Dashboard() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    const handleBudgetUpdated = () => fetchData();
+    window.addEventListener('budgetUpdated', handleBudgetUpdated);
+    return () => window.removeEventListener('budgetUpdated', handleBudgetUpdated);
+  }, [fetchData]);
+
   // Auto-refresh every 60 seconds
   useEffect(() => {
     if (!autoRefresh) return;
@@ -157,23 +163,23 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-pulse">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300 animate-pulse">
           {error}
         </div>
       )}
 
       {/* Auto-Refresh Controls */}
-      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-blue-700">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <Clock size={18} className="text-blue-600" />
+            <Clock size={18} className="text-blue-600 dark:text-blue-300" />
             <div>
-              <p className="text-sm font-medium text-gray-900">Last Updated</p>
-              <p className="text-xs text-gray-600">{formatTime(lastUpdated)}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Last Updated</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">{formatTime(lastUpdated)}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -184,7 +190,7 @@ export function Dashboard() {
                 onChange={(e) => setAutoRefresh(e.target.checked)}
                 className="w-4 h-4 rounded"
               />
-              <span className="text-sm text-gray-700">Auto-refresh (60s)</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Auto-refresh (60s)</span>
             </label>
             <Button
               onClick={fetchData}
@@ -201,30 +207,30 @@ export function Dashboard() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg transition-all">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1 font-medium">Total Income</p>
+<Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm mb-1 font-medium dark:text-gray-400">Total Income</p>
               <p className="text-2xl sm:text-3xl font-bold text-green-600">{formatCurrency(totalIncome, user?.currency)}</p>
             </div>
             <TrendingUp className="text-green-600 opacity-30" size={40} />
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-red-50 to-rose-50 hover:shadow-lg transition-all">
+        <Card className="p-6 bg-gradient-to-br from-red-50 to-rose-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1 font-medium">Total Expenses</p>
+              <p className="text-gray-600 text-sm mb-1 font-medium dark:text-gray-400">Total Expenses</p>
               <p className="text-2xl sm:text-3xl font-bold text-red-600">{formatCurrency(totalExpense, user?.currency)}</p>
             </div>
             <TrendingDown className="text-red-600 opacity-30" size={40} />
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-lg transition-all">
+        <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1 font-medium">Remaining</p>
+              <p className="text-gray-600 text-sm mb-1 font-medium dark:text-gray-400">Remaining</p>
               <p className={`text-2xl sm:text-3xl font-bold ${savings >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 {formatCurrency(savings, user?.currency)}
               </p>
@@ -233,10 +239,10 @@ export function Dashboard() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 hover:shadow-lg transition-all">
+        <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1 font-medium">Savings Rate</p>
+              <p className="text-gray-600 text-sm mb-1 font-medium dark:text-gray-400">Savings Rate</p>
               <p className="text-2xl sm:text-3xl font-bold text-indigo-600">{savingsPercent}%</p>
             </div>
             <PiggyBank className="text-indigo-600 opacity-30" size={40} />
@@ -246,18 +252,18 @@ export function Dashboard() {
 
       {/* Budget Alerts */}
       {overBudgetCategories.length > 0 && (
-        <Card className="p-6 border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 animate-pulse">
+        <Card className="p-6 border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 animate-pulse dark:border-orange-700 dark:bg-orange-900/20">
           <div className="flex items-start gap-3">
             <AlertCircle className="text-orange-600 flex-shrink-0 mt-1" size={24} />
             <div>
-              <h3 className="font-semibold text-orange-900 mb-3">⚠️ Budget Alerts</h3>
+              <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-3">⚠️ Budget Alerts</h3>
               <div className="space-y-2">
                 {overBudgetCategories.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-white bg-opacity-50 p-3 rounded-lg">
-                    <span className="text-sm text-orange-800">
+                  <div key={idx} className="flex items-center justify-between bg-white bg-opacity-50 dark:bg-slate-900/60 p-3 rounded-lg">
+                    <span className="text-sm text-orange-800 dark:text-orange-200">
                       <span className="capitalize font-medium">{item.category}</span> exceeded budget
                     </span>
-                    <span className="text-sm font-bold text-red-600">
+                    <span className="text-sm font-bold text-red-600 dark:text-red-300">
                       +${(item.actual - item.budgeted).toFixed(2)}
                     </span>
                   </div>
@@ -270,29 +276,27 @@ export function Dashboard() {
 
       {/* Bill Due Alerts */}
       {billsDueSoon.length > 0 && (
-        <Card className="p-6 border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50 animate-pulse">
+        <Card className="p-6 border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50 animate-pulse dark:border-blue-700 dark:bg-slate-900/20">
           <div className="flex items-start gap-3">
             <Clock className="text-blue-600 flex-shrink-0 mt-1" size={24} />
             <div>
-              <h3 className="font-semibold text-blue-900 mb-3">⏰ Bills Due Soon</h3>
-              <div className="space-y-2">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-3">⏰ Bills Due Soon</h3>
                 {billsDueSoon.map((bill, idx) => {
                   const daysUntilDue = Math.ceil((new Date(bill.nextDueDate) - new Date()) / (1000 * 60 * 60 * 24));
                   return (
-                    <div key={idx} className="flex items-center justify-between bg-white bg-opacity-50 p-3 rounded-lg">
+                    <div key={idx} className="flex items-center justify-between bg-white bg-opacity-50 dark:bg-slate-900/60 p-3 rounded-lg">
                       <div className="flex items-center gap-2 flex-1">
-                        <span className="text-sm text-blue-800 font-medium">{bill.name}</span>
-                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                        <span className="text-sm text-blue-800 dark:text-blue-200 font-medium">{bill.name}</span>
+                        <span className="text-xs bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-blue-200 px-2 py-1 rounded">
                           {daysUntilDue === 1 ? 'Tomorrow' : `In ${daysUntilDue} days`}
                         </span>
                       </div>
-                      <span className="text-sm font-bold text-blue-600">
+                      <span className="text-sm font-bold text-blue-600 dark:text-blue-300">
                         {formatCurrency(bill.amount, user?.currency)}
                       </span>
                     </div>
                   );
                 })}
-              </div>
             </div>
           </div>
         </Card>
@@ -302,8 +306,8 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense Breakdown */}
         {expenseData.length > 0 && (
-          <Card className="p-6 hover:shadow-lg transition-all">
-            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900">Expense Breakdown</h2>
+          <Card className="p-6 hover:shadow-lg transition-all dark:bg-slate-900">
+            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900 dark:text-white">Expense Breakdown</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -328,8 +332,8 @@ export function Dashboard() {
 
         {/* Income Breakdown */}
         {incomeData.length > 0 && (
-          <Card className="p-6 hover:shadow-lg transition-all">
-            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900">Income Breakdown</h2>
+          <Card className="p-6 hover:shadow-lg transition-all dark:bg-slate-900">
+            <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900 dark:text-white">Income Breakdown</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -357,10 +361,10 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Savings Goal Progress */}
         {savingsGoals && savingsGoals.length > 0 ? (
-          <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg transition-all">
+          <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800">
             <div className="flex items-center gap-2 mb-4">
-              <Target size={20} className="text-green-600" />
-              <h3 className="font-bold text-gray-900">Active Savings Goals</h3>
+              <Target size={20} className="text-green-600 dark:text-green-300" />
+              <h3 className="font-bold text-gray-900 dark:text-white">Active Savings Goals</h3>
             </div>
             <div className="space-y-4">
               <div>
@@ -391,10 +395,10 @@ export function Dashboard() {
             </div>
           </Card>
         ) : (
-          <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-lg transition-all">
+          <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-lg transition-all dark:from-slate-900 dark:to-slate-800 dark:bg-slate-900">
             <div className="flex items-center gap-2 mb-4">
-              <Target size={20} className="text-blue-600" />
-              <h3 className="font-bold text-gray-900">No Savings Goals</h3>
+              <Target size={20} className="text-blue-600 dark:text-blue-300" />
+              <h3 className="font-bold text-gray-900 dark:text-white">No Savings Goals</h3>
             </div>
             <div className="space-y-4">
               <p className="text-sm text-gray-600">
@@ -430,13 +434,13 @@ export function Dashboard() {
                 <h3 className="font-bold text-gray-900">Month Comparison</h3>
               </div>
               <div className="space-y-4">
-                <div className="bg-white bg-opacity-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">This Month</p>
-                  <p className="text-xl font-bold text-gray-900">${comparison.currentMonth.toFixed(2)}</p>
+                <div className="bg-white bg-opacity-50 dark:bg-slate-900/70 p-3 rounded">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">This Month</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">${comparison.currentMonth.toFixed(2)}</p>
                 </div>
-                <div className="bg-white bg-opacity-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">Last Month</p>
-                  <p className="text-lg font-semibold text-gray-700">${comparison.previousMonth.toFixed(2)}</p>
+                <div className="bg-white bg-opacity-50 dark:bg-slate-900/70 p-3 rounded">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Last Month</p>
+                  <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">${comparison.previousMonth.toFixed(2)}</p>
                 </div>
                 <div className={`p-3 rounded text-center ${isUp ? 'bg-orange-100' : 'bg-green-100'}`}>
                   <p className={`text-sm font-medium ${isUp ? 'text-orange-800' : 'text-green-800'}`}>
@@ -472,7 +476,7 @@ export function Dashboard() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-sm text-gray-600 text-center py-4">
+                  <div className="text-sm text-gray-600 dark:text-gray-400 text-center py-4">
                     ✅ All spending on track!
                   </div>
                 )}

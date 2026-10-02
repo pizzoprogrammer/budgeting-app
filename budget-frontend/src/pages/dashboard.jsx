@@ -58,40 +58,40 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Total Income</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Total Income</p>
               <p className="text-3xl font-bold text-green-600">{formatCurrency(totalIncome, user?.currency)}</p>
             </div>
             <TrendingUp className="text-green-600 opacity-20" size={32} />
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Total Expenses</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Total Expenses</p>
               <p className="text-3xl font-bold text-red-600">{formatCurrency(totalExpense, user?.currency)}</p>
             </div>
             <TrendingDown className="text-red-600 opacity-20" size={32} />
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Remaining</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Remaining</p>
               <p className={`text-3xl font-bold ${savings >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 {formatCurrency(savings, user?.currency)}
               </p>
@@ -100,10 +100,10 @@ export function Dashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Savings Rate</p>
+              <p className="text-gray-600 text-sm mb-1 dark:text-gray-400">Savings Rate</p>
               <p className="text-3xl font-bold text-indigo-600">{savingsPercent}%</p>
             </div>
             <PiggyBank className="text-indigo-600 opacity-20" size={32} />
@@ -113,41 +113,41 @@ export function Dashboard() {
 
       {/* Budget Status */}
       {budgetStatus && (
-        <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Budget Overview</h2>
+        <Card className="p-6 dark:bg-slate-900">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Budget Overview</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b">
+              <thead className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                 <tr className="text-left">
-                  <th className="pb-3 font-semibold text-gray-700">Category</th>
-                  <th className="pb-3 font-semibold text-gray-700">Budget</th>
-                  <th className="pb-3 font-semibold text-gray-700">Spent</th>
-                  <th className="pb-3 font-semibold text-gray-700">Remaining</th>
-                  <th className="pb-3 font-semibold text-gray-700">Status</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Category</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Budget</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Spent</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Remaining</th>
+                  <th className="pb-3 font-semibold text-gray-700 dark:text-gray-200">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y bg-white dark:bg-slate-950 dark:divide-gray-700">
                 {budgetStatus.expenseStatus?.map((item, idx) => {
-                  const percentUsed = item.budget ? ((item.spent / item.budget) * 100).toFixed(0) : 0;
+                  const percentUsed = item.budget ? Math.round((item.spent / item.budget) * 100) : 0;
                   const isOverBudget = item.spent > item.budget;
 
                   return (
-                    <tr key={idx} className="hover:bg-gray-50">
-                      <td className="py-3 capitalize">{item.category}</td>
-                      <td className="py-3">${item.budget.toFixed(2)}</td>
-                      <td className="py-3">${item.spent.toFixed(2)}</td>
-                      <td className="py-3">${(item.budget - item.spent).toFixed(2)}</td>
+                    <tr key={item.category || idx} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="py-3 capitalize text-gray-800 dark:text-gray-300">{item.category}</td>
+                      <td className="py-3 text-gray-800 dark:text-gray-300">{formatCurrency(item.budget || 0, user?.currency)}</td>
+                      <td className="py-3 text-gray-800 dark:text-gray-300">{formatCurrency(item.spent || 0, user?.currency)}</td>
+                      <td className="py-3 text-gray-800 dark:text-gray-300">{formatCurrency((item.budget || 0) - (item.spent || 0), user?.currency)}</td>
                       <td className="py-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all ${
-                                isOverBudget ? 'bg-red-500' : 'bg-green-500'
+                                isOverBudget ? 'bg-red-500 dark:bg-red-500' : 'bg-green-500 dark:bg-green-500'
                               }`}
                               style={{ width: `${Math.min(percentUsed, 100)}%` }}
                             />
                           </div>
-                          <span className="text-xs font-semibold">{percentUsed}%</span>
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{percentUsed}%</span>
                         </div>
                       </td>
                     </tr>
